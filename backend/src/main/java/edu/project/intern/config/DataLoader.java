@@ -1,0 +1,215 @@
+package edu.project.intern.config;
+
+import edu.project.intern.company.Company;
+import edu.project.intern.company.CompanyRepository;
+import edu.project.intern.companyevaluation.CompanyEvaluation;
+import edu.project.intern.companyevaluation.CompanyEvaluationRepository;
+import edu.project.intern.companyevaluation.EvaluationTerm;
+import edu.project.intern.companyevaluation.ExperienceEvaluation;
+import edu.project.intern.joblisting.JobListing;
+import edu.project.intern.joblisting.JobListingRepository;
+import edu.project.intern.student.StudentService;
+import edu.project.intern.student.StudentSignUpRequest;
+import edu.project.intern.user.User;
+import edu.project.intern.user.UserRepository;
+import edu.project.intern.user.UserService;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class DataLoader {
+
+
+  @Bean
+  public CommandLineRunner runner(CompanyRepository companyRepository, StudentService studentService, JobListingRepository jobListingRepository, CompanyEvaluationRepository companyEvaluationRepository) {
+    return (String... args) -> {
+      var student = studentService.signUp(new StudentSignUpRequest("Jeman", "Mama", "jemanmama@gmail.com", "Password#1"));
+      var company1 = Company.builder()
+                         .id(1L)
+                         .name("Alliance Software Incorporation")
+                         .description("Alliance Software Incorporation is a software development company that provides software solutions to businesses.")
+                         .tags(List.of("Computer Science", "Business", "OJT", "Software"))
+                         .addressLine1("Kamputhaw, Cebu City, Cebu")
+                         .addressLine2("9F Ayala Center Cebu Tower, Bohol St., Cebu Business Park")
+                         .yearEstablished(2016)
+                         .noOfEmployeesMin(1001)
+                         .noOfEmployeesMax(5000)
+                         .contactEmail("hr@alliancesoftwareincorporation.com")
+                         .build();
+      company1 = companyRepository.save(company1);
+      var company2 = Company.builder()
+                         .id(2L)
+                         .name("Accenture Incorporation")
+                         .description("Accenture Incorporation is a global professional services company that provides consulting and outsourcing services.")
+                         .tags(List.of("Computer Science", "Outsourcing", "Consulting", "OJT"))
+                         .addressLine1("Mandaluyong City, Metro Manila")
+                         .addressLine2("6750 Ayala Avenue, Makati City, Metro Manila")
+                         .yearEstablished(1989)
+                         .noOfEmployeesMin(10001)
+                         .noOfEmployeesMax(50000)
+                         .contactEmail("hr@accentureincorporation.com")
+                         .build();
+      company2 = companyRepository.save(company2);
+      var company3 = Company.builder()
+                         .id(3L)
+                         .name("Google Incorporation")
+                         .description("Google Incorporation is a multinational technology company that specializes in Internet-related services and products.")
+                         .tags(List.of("Computer Science", "Internet", "OJT", "Software"))
+                         .addressLine1("Mountain View, California")
+                         .addressLine2("1600 Amphitheatre Parkway, Mountain View, California")
+                         .yearEstablished(1998)
+                         .noOfEmployeesMin(10001)
+                         .noOfEmployeesMax(50000)
+                         .contactEmail("hr@google.com")
+                         .build();
+      company3 = companyRepository.save(company3);
+      var company4 = Company.builder()
+                         .id(4L)
+                         .name("Facebook Incorporation")
+                         .description("Facebook Incorporation is an American online social media and social networking service company.")
+                         .tags(List.of("Computer Science", "Social Media", "OJT", "Software"))
+                         .addressLine1("Menlo Park, California")
+                         .addressLine2("1 Hacker Way, Menlo Park, California")
+                         .yearEstablished(2004)
+                         .noOfEmployeesMin(10001)
+                         .noOfEmployeesMax(50000)
+                         .contactEmail("hr@faceboook.com")
+                         .build();
+      company4 = companyRepository.save(company4);
+      var company5 = Company.builder()
+                         .id(5L)
+                         .name("Amazon Incorporation")
+                         .description("Amazon Incorporation is an American multinational technology company that focuses on e-commerce, cloud computing, digital streaming, and artificial intelligence.")
+                         .tags(List.of("Computer Science", "E-commerce", "Cloud Computing", "OJT"))
+                         .addressLine1("Seattle, Washington")
+                         .addressLine2("410 Terry Ave N, Seattle, Washington")
+                         .yearEstablished(1994)
+                         .noOfEmployeesMin(10001)
+                         .noOfEmployeesMax(50000)
+                         .contactEmail("hr@amazon.com")
+                         .build();
+      company5 = companyRepository.save(company5);
+      jobListingRepository.save(JobListing.builder()
+                          .company(company1)
+                          .datePosted(LocalDateTime.now())
+                          .jobTitle("Software Engineer Intern")
+                          .jobDescription("Develop software applications")
+                          .datePosted(LocalDateTime.now())
+                          .build());
+      jobListingRepository.save(JobListing.builder()
+                          .company(company2)
+                          .datePosted(LocalDateTime.now())
+                          .jobTitle("Software Engineer Intern")
+                          .jobDescription("Develop software applications")
+                          .datePosted(LocalDateTime.now())
+                          .build());
+      jobListingRepository.save(JobListing.builder()
+                          .company(company3)
+                          .datePosted(LocalDateTime.now())
+                          .jobTitle("Software Engineer Intern")
+                          .jobDescription("Develop software applications")
+                          .datePosted(LocalDateTime.now())
+                          .build());
+      jobListingRepository.save(JobListing.builder()
+                          .company(company4)
+                          .datePosted(LocalDateTime.now())
+                          .jobTitle("Software Engineer Intern")
+                          .jobDescription("Develop software applications")
+                          .datePosted(LocalDateTime.now())
+                          .build());
+      jobListingRepository.save(JobListing.builder()
+                          .company(company5)
+                          .datePosted(LocalDateTime.now())
+                          .jobTitle("Software Engineer Intern")
+                          .jobDescription("Develop software applications")
+                          .datePosted(LocalDateTime.now())
+                          .build());
+      var companyEvaluation = CompanyEvaluation.builder()
+                                  .company(company1)
+                                  .evaluatedBy(student)
+                                  .dateEvaluated(LocalDateTime.now())
+                                  .evaluationTerm(EvaluationTerm.MIDTERM)
+                                  .isRecommendedForOJT(false)
+                                  .isRecommendedForOJTReason("Lackluster Leadership")
+                                  .experienceEvaluation(ExperienceEvaluation.VERY_BAD)
+                                  .experienceWithCompany("Despite the promising facade, Alliance Software fell short of expectations. The management's disorganization and lack of clear direction made it challenging to thrive within the company. Communication breakdowns were rampant, resulting in missed deadlines and frustrated team members. Overall, a disappointing experience.")
+                                  .build();
+      companyEvaluationRepository.save(companyEvaluation);
+
+      var companyEvaluation2 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(false)
+                                   .isRecommendedForOJTReason("Mixed Bag")
+                                   .experienceEvaluation(ExperienceEvaluation.BAD)
+                                   .experienceWithCompany("Alliance Software has its strengths and weaknesses. While the work environment is generally pleasant, there are noticeable inconsistencies in project management and resource allocation. Additionally, the company's growth trajectory seems stagnant, with limited opportunities for career advancement. It's an okay place to work, but there's room for improvement.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation2);
+
+      var companyEvaluation3 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(true)
+                                   .isRecommendedForOJTReason("Valuable Learning Experience")
+                                   .experienceEvaluation(ExperienceEvaluation.VERY_GOOD)
+                                   .experienceWithCompany("My time as an OJT at Alliance Software was invaluable. The company's commitment to nurturing young talent is commendable. From day one, I was given meaningful tasks and mentorship opportunities that greatly contributed to my professional development. The supportive work culture and knowledgeable colleagues made it a fulfilling experience. Highly recommended for aspiring software professionals.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation3);
+
+      var companyEvaluation4 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(true)
+                                   .isRecommendedForOJTReason("Innovative Solutions")
+                                   .experienceEvaluation(ExperienceEvaluation.GOOD)
+                                   .experienceWithCompany("Alliance Software stands out for its innovative approach to software development. Working here has exposed me to cutting-edge technologies and methodologies that have enhanced my skills significantly. The collaborative atmosphere fosters creativity and encourages experimentation. While there are occasional challenges, the overall experience has been rewarding. Highly recommend for those seeking a dynamic work environment.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation4);
+
+      var companyEvaluation5 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(false)
+                                   .isRecommendedForOJTReason("Poor Work-Life Balance")
+                                   .experienceEvaluation(ExperienceEvaluation.VERY_BAD)
+                                   .experienceWithCompany("Working at Alliance Software has been a draining experience due to the lack of work-life balance. The workload is often overwhelming, with tight deadlines and long hours becoming the norm. Additionally, there's little support from management in addressing these issues. Overall, not recommended for those prioritizing their personal well-being.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation5);
+
+      var companyEvaluation6 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(true)
+                                   .isRecommendedForOJTReason("Great Team Collaboration")
+                                   .experienceEvaluation(ExperienceEvaluation.GOOD)
+                                   .experienceWithCompany("One of the highlights of working at Alliance Software is the exceptional team collaboration. Colleagues are always willing to lend a helping hand and share knowledge, fostering a supportive and inclusive environment. This collaborative spirit greatly contributes to productivity and overall job satisfaction. Highly recommended for those who value teamwork.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation6);
+
+      var companyEvaluation7 = CompanyEvaluation.builder()
+                                   .company(company1)
+                                   .evaluatedBy(student)
+                                   .dateEvaluated(LocalDateTime.now())
+                                   .evaluationTerm(EvaluationTerm.MIDTERM)
+                                   .isRecommendedForOJT(true)
+                                   .isRecommendedForOJTReason("Professional Growth Opportunities")
+                                   .experienceEvaluation(ExperienceEvaluation.VERY_GOOD)
+                                   .experienceWithCompany("Alliance Software provides ample opportunities for professional growth and development. The company offers training programs, workshops, and mentorship initiatives aimed at enhancing employees' skills and advancing their careers. Additionally, there are opportunities to work on diverse projects, allowing for exposure to different technologies and industries. Highly recommended for individuals seeking continuous learning and growth.")
+                                   .build();
+      companyEvaluationRepository.save(companyEvaluation7);
+    };
+  }
+}

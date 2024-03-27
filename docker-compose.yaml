@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  postgresql:
+    image: postgres:14
+    container_name: database
+    ports:
+      - 5432:5432
+    env_file:
+      - ./dockercompose/env/postgres.env
+    networks:
+      - intern
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 1s
+      timeout: 5s
+      retries: 15
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: backend
+    container_name: backend
+    depends_on:
+      - postgresql
+    ports:
+      - 8080:8080
+    env_file:
+      - ./dockercompose/env/backend.env
+    networks:
+      - intern
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend
+    container_name: frontend
+    ports:
+      - 3000:3000
+    env_file:
+      - ./dockercompose/env/frontend.env
+    depends_on:
+      - backend
+    networks:
+      - intern
+
+networks:
+  intern:
+    driver: bridge
