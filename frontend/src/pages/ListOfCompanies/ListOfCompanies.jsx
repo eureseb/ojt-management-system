@@ -6,19 +6,32 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getJobListings } from '../../utils/api';
 import parseJobListings from '../../utils/parseJobListings';
+import Pagination from '../../components/Pagination/Pagination';
 
 export default function ListOfCompanies() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [jobListings, setJobListings] = useState([]);
+  const [totalNumberOfPages, setTotalNumberOfPages] = useState(0);
+  const [totalNumberOfItems, setTotalNumberOfItems] = useState(0);
 
   useEffect(() => {
     (async () => {
-      const page = searchParams.get('page') || 0;
-      const rawJobListings = await getJobListings(page);
+      const page = searchParams.get('page') || 1;
+      const {
+        content: rawJobListings,
+        totalElements,
+        totalPages,
+      } = await getJobListings(page - 1);
+      setTotalNumberOfPages(totalPages);
+      setTotalNumberOfItems(totalElements);
       const jobListings = parseJobListings(rawJobListings);
       setJobListings(jobListings);
     })();
   }, [searchParams]);
+
+  const onPageChange = (page) => {
+    setSearchParams({ page });
+  };
 
   return (
     <Stack gap={5} padding={5}>
@@ -38,6 +51,13 @@ export default function ListOfCompanies() {
             located in, according to the field or discipline they pertain to, or
             according to the experience level needed from the candidate.
           </Typography>
+          <Pagination
+            totalPages={totalNumberOfPages}
+            currentPage={Number(searchParams.get('page') || 1)}
+            totalCount={totalNumberOfItems}
+            totalDisplayed={10}
+            onPageChange={onPageChange}
+          />
           <CompanyList jobListings={jobListings} />
         </Stack>
         <InternshipCategories internshipCategories={internshipCategories} />

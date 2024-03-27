@@ -35,7 +35,10 @@ export default function Header() {
             About
           </MuiLink>
         </Link>
-        {!isLoggedIn && (
+        {(!isLoggedIn ||
+          path === '/' ||
+          path === '/sign-in' ||
+          path === '/sign-up') && (
           <>
             <Link to="/sign-in" style={{ textDecoration: 'none' }}>
               <MuiLink

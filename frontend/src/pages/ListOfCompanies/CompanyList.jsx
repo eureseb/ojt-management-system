@@ -45,7 +45,7 @@ CompanyList.propTypes = {
       yearEstablished: PropTypes.number.isRequired,
       employeeMin: PropTypes.number.isRequired,
       employeeMax: PropTypes.number.isRequired,
-      datePosted: PropTypes.string.isRequired,
+      datePosted: PropTypes.instanceOf(Date).isRequired,
     })
   ).isRequired,
 };

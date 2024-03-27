@@ -11,7 +11,7 @@ COPY . .
 RUN gradle clean build --no-daemon -x test
 
 # Use a smaller base image for the runtime environment
-FROM openjdk AS runtime
+FROM openjdk:latest AS runtime
 
 # Set the working directory in the container
 WORKDIR /app

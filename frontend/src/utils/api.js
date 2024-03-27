@@ -46,12 +46,12 @@ export async function getLoggedInStudentInfo() {
 }
 
 export async function getJobListings(page) {
-  const res = await axios.get(`${JOB_LISTING_URL}?page=${page}`, {
+  const res = await axios.get(`${JOB_LISTING_URL}?page=${page}&size=10`, {
     headers: {
       Authorization: getAuthHeader(),
     },
   });
-  return res.data.content;
+  return res.data;
 }
 
 export async function applyForJob({
