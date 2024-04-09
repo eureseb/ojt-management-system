@@ -1,19 +1,21 @@
 package edu.project.intern.config;
 
+import edu.project.intern.CompanyEvaluationStatus.CompanyEvaluationStatus;
+import edu.project.intern.CompanyEvaluationStatus.CompanyEvaluationStatusRepository;
+import edu.project.intern.CompanyEvaluationStatus.CompanyEvaluationStatusService;
 import edu.project.intern.company.Company;
 import edu.project.intern.company.CompanyRepository;
-import edu.project.intern.companyevaluation.CompanyEvaluation;
-import edu.project.intern.companyevaluation.CompanyEvaluationRepository;
-import edu.project.intern.companyevaluation.EvaluationTerm;
+import edu.project.intern.companyevaluation.CompanyEvaluationRequest;
+import edu.project.intern.companyevaluation.CompanyEvaluationService;
 import edu.project.intern.companyevaluation.ExperienceEvaluation;
 import edu.project.intern.joblisting.JobListing;
 import edu.project.intern.joblisting.JobListingRepository;
 import edu.project.intern.student.StudentService;
 import edu.project.intern.student.StudentSignUpRequest;
-import edu.project.intern.user.User;
-import edu.project.intern.user.UserRepository;
-import edu.project.intern.user.UserService;
+import edu.project.intern.teacher.TeacherService;
+import edu.project.intern.teacher.TeacherSignUpRequest;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +26,13 @@ public class DataLoader {
 
 
   @Bean
-  public CommandLineRunner runner(CompanyRepository companyRepository, StudentService studentService, JobListingRepository jobListingRepository, CompanyEvaluationRepository companyEvaluationRepository) {
+  public CommandLineRunner runner(CompanyRepository companyRepository, StudentService studentService, JobListingRepository jobListingRepository, CompanyEvaluationService companyEvaluationService, TeacherService teacherService, CompanyEvaluationStatusRepository companyEvaluationStatusRepository) {
     return (String... args) -> {
+      companyEvaluationStatusRepository.save(new CompanyEvaluationStatus(1L, true, "Final Evaluation",
+          LocalDateTime.now().plusDays(100)));
       var student = studentService.signUp(new StudentSignUpRequest("Jeman", "Mama", "jemanmama@gmail.com", "Password#1"));
+      TeacherSignUpRequest request = new TeacherSignUpRequest("JemanT", "MamaT", "jemanmamat@gmail.com", "Password#1");
+      teacherService.signUp(request);
       var company1 = Company.builder()
                          .id(1L)
                          .name("Alliance Software Incorporation")
@@ -328,90 +334,68 @@ public class DataLoader {
                                     .datePosted(LocalDateTime.now())
                                     .build());
 
+      var companyEvaluation1 = new CompanyEvaluationRequest(
+          company1.getId(),
+          false,
+          "Lackluster Leadership",
+          ExperienceEvaluation.VERY_BAD,
+          "Despite the promising facade, Alliance Software fell short of expectations. The management's disorganization and lack of clear direction made it challenging to thrive within the company. Communication breakdowns were rampant, resulting in missed deadlines and frustrated team members. Overall, a disappointing experience."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation1, student.getAccountInformation());
 
-      var companyEvaluation = CompanyEvaluation.builder()
-                                  .company(company1)
-                                  .evaluatedBy(student)
-                                  .dateEvaluated(LocalDateTime.now())
-                                  .evaluationTerm(EvaluationTerm.MIDTERM)
-                                  .isRecommendedForOJT(false)
-                                  .isRecommendedForOJTReason("Lackluster Leadership")
-                                  .experienceEvaluation(ExperienceEvaluation.VERY_BAD)
-                                  .experienceWithCompany("Despite the promising facade, Alliance Software fell short of expectations. The management's disorganization and lack of clear direction made it challenging to thrive within the company. Communication breakdowns were rampant, resulting in missed deadlines and frustrated team members. Overall, a disappointing experience.")
-                                  .build();
-      companyEvaluationRepository.save(companyEvaluation);
+      var companyEvaluation2 = new CompanyEvaluationRequest(
+          company1.getId(),
+          false,
+          "Mixed Bag",
+          ExperienceEvaluation.BAD,
+          "Alliance Software has its strengths and weaknesses. While the work environment is generally pleasant, there are noticeable inconsistencies in project management and resource allocation. Additionally, the company's growth trajectory seems stagnant, with limited opportunities for career advancement. It's an okay place to work, but there's room for improvement."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation2, student.getAccountInformation());
 
-      var companyEvaluation2 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(false)
-                                   .isRecommendedForOJTReason("Mixed Bag")
-                                   .experienceEvaluation(ExperienceEvaluation.BAD)
-                                   .experienceWithCompany("Alliance Software has its strengths and weaknesses. While the work environment is generally pleasant, there are noticeable inconsistencies in project management and resource allocation. Additionally, the company's growth trajectory seems stagnant, with limited opportunities for career advancement. It's an okay place to work, but there's room for improvement.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation2);
+      var companyEvaluation3 = new CompanyEvaluationRequest(
+          company1.getId(),
+          true,
+          "Valuable Learning Experience",
+          ExperienceEvaluation.VERY_GOOD,
+          "My time as an OJT at Alliance Software was invaluable. The company's commitment to nurturing young talent is commendable. From day one, I was given meaningful tasks and mentorship opportunities that greatly contributed to my professional development. The supportive work culture and knowledgeable colleagues made it a fulfilling experience. Highly recommended for aspiring software professionals."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation3, student.getAccountInformation());
 
-      var companyEvaluation3 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(true)
-                                   .isRecommendedForOJTReason("Valuable Learning Experience")
-                                   .experienceEvaluation(ExperienceEvaluation.VERY_GOOD)
-                                   .experienceWithCompany("My time as an OJT at Alliance Software was invaluable. The company's commitment to nurturing young talent is commendable. From day one, I was given meaningful tasks and mentorship opportunities that greatly contributed to my professional development. The supportive work culture and knowledgeable colleagues made it a fulfilling experience. Highly recommended for aspiring software professionals.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation3);
+      var companyEvaluation4 = new CompanyEvaluationRequest(
+          company1.getId(),
+          true,
+          "Innovative Solutions",
+          ExperienceEvaluation.GOOD,
+          "Alliance Software stands out for its innovative approach to software development. Working here has exposed me to cutting-edge technologies and methodologies that have enhanced my skills significantly. The collaborative atmosphere fosters creativity and encourages experimentation. While there are occasional challenges, the overall experience has been rewarding. Highly recommend for those seeking a dynamic work environment."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation4, student.getAccountInformation());
 
-      var companyEvaluation4 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(true)
-                                   .isRecommendedForOJTReason("Innovative Solutions")
-                                   .experienceEvaluation(ExperienceEvaluation.GOOD)
-                                   .experienceWithCompany("Alliance Software stands out for its innovative approach to software development. Working here has exposed me to cutting-edge technologies and methodologies that have enhanced my skills significantly. The collaborative atmosphere fosters creativity and encourages experimentation. While there are occasional challenges, the overall experience has been rewarding. Highly recommend for those seeking a dynamic work environment.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation4);
+      var companyEvaluation5 = new CompanyEvaluationRequest(
+          company1.getId(),
+          false,
+          "Poor Work-Life Balance",
+          ExperienceEvaluation.VERY_BAD,
+          "Working at Alliance Software has been a draining experience due to the lack of work-life balance. The workload is often overwhelming, with tight deadlines and long hours becoming the norm. Additionally, there's little support from management in addressing these issues. Overall, not recommended for those prioritizing their personal well-being."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation5, student.getAccountInformation());
 
-      var companyEvaluation5 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(false)
-                                   .isRecommendedForOJTReason("Poor Work-Life Balance")
-                                   .experienceEvaluation(ExperienceEvaluation.VERY_BAD)
-                                   .experienceWithCompany("Working at Alliance Software has been a draining experience due to the lack of work-life balance. The workload is often overwhelming, with tight deadlines and long hours becoming the norm. Additionally, there's little support from management in addressing these issues. Overall, not recommended for those prioritizing their personal well-being.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation5);
+      var companyEvaluation6 = new CompanyEvaluationRequest(
+          company1.getId(),
+          true,
+          "Great Team Collaboration",
+          ExperienceEvaluation.GOOD,
+          "One of the highlights of working at Alliance Software is the exceptional team collaboration. Colleagues are always willing to lend a helping hand and share knowledge, fostering a supportive and inclusive environment. This collaborative spirit greatly contributes to productivity and overall job satisfaction. Highly recommended for those who value teamwork."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation6, student.getAccountInformation());
 
-      var companyEvaluation6 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(true)
-                                   .isRecommendedForOJTReason("Great Team Collaboration")
-                                   .experienceEvaluation(ExperienceEvaluation.GOOD)
-                                   .experienceWithCompany("One of the highlights of working at Alliance Software is the exceptional team collaboration. Colleagues are always willing to lend a helping hand and share knowledge, fostering a supportive and inclusive environment. This collaborative spirit greatly contributes to productivity and overall job satisfaction. Highly recommended for those who value teamwork.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation6);
-
-      var companyEvaluation7 = CompanyEvaluation.builder()
-                                   .company(company1)
-                                   .evaluatedBy(student)
-                                   .dateEvaluated(LocalDateTime.now())
-                                   .evaluationTerm(EvaluationTerm.MIDTERM)
-                                   .isRecommendedForOJT(true)
-                                   .isRecommendedForOJTReason("Professional Growth Opportunities")
-                                   .experienceEvaluation(ExperienceEvaluation.VERY_GOOD)
-                                   .experienceWithCompany("Alliance Software provides ample opportunities for professional growth and development. The company offers training programs, workshops, and mentorship initiatives aimed at enhancing employees' skills and advancing their careers. Additionally, there are opportunities to work on diverse projects, allowing for exposure to different technologies and industries. Highly recommended for individuals seeking continuous learning and growth.")
-                                   .build();
-      companyEvaluationRepository.save(companyEvaluation7);
+      var companyEvaluation7 = new CompanyEvaluationRequest(
+          company1.getId(),
+          true,
+          "Professional Growth Opportunities",
+          ExperienceEvaluation.VERY_GOOD,
+          "Alliance Software provides ample opportunities for professional growth and development. The company offers training programs, workshops, and mentorship initiatives aimed at enhancing employees' skills and advancing their careers. Additionally, there are opportunities to work on diverse projects, allowing for exposure to different technologies and industries. Highly recommended for individuals seeking continuous learning and growth."
+      );
+      companyEvaluationService.createCompanyEvaluation(companyEvaluation7, student.getAccountInformation());
     };
   }
 }

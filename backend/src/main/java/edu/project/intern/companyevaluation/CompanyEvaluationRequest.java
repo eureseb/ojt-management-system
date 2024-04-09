@@ -5,6 +5,5 @@ public record CompanyEvaluationRequest(
     Boolean isRecommendedForOJT,
     String isRecommendedForOJTReason,
     ExperienceEvaluation experienceEvaluation,
-    String experienceWithCompany,
-    EvaluationTerm evaluationTerm
+    String experienceWithCompany
 ) {}

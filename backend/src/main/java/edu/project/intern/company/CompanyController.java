@@ -5,8 +5,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,12 +27,24 @@ public class CompanyController {
   }
 
   @GetMapping("/all")
-  public List<Company> getAllCompanies(){
+  public List<CompactCompany> getAllCompanies(){
     return companyService.getAllCompanies();
   }
 
   @GetMapping("/{id}")
   public Company getCompanyById(@PathVariable Long id){
     return companyService.getCompanyById(id);
+  }
+
+  @PutMapping("/{id}")
+  @PreAuthorize("hasRole('TEACHER')")
+  public Company updateCompany(@PathVariable Long id, @RequestBody UpdateCompanyRequest request){
+    return companyService.updateCompany(id, request);
+  }
+
+  @PostMapping
+  @PreAuthorize("hasRole('TEACHER')")
+  public Company createCompany(@RequestBody CreateCompanyRequest request){
+    return companyService.createCompany(request);
   }
 }

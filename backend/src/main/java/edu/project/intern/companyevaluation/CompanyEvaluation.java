@@ -34,8 +34,6 @@ public class CompanyEvaluation {
   private String isRecommendedForOJTReason;
   @Enumerated(EnumType.STRING)
   private ExperienceEvaluation experienceEvaluation;
-  @Enumerated(EnumType.STRING)
-  private EvaluationTerm evaluationTerm;
   @Column(columnDefinition = "TEXT")
   private String experienceWithCompany;
   @ManyToOne

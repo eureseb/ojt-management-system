@@ -1,0 +1,9 @@
+.recharts-legend-item-text {
+  font-family: var(--joy-fontFamily-body);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+div.recharts-wrapper {
+  margin-left: -18px;
+}

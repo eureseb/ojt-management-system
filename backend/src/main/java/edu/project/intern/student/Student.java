@@ -1,12 +1,15 @@
 package edu.project.intern.student;
 
+import edu.project.intern.company.Company;
 import edu.project.intern.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,9 +28,7 @@ public class Student {
   private Long id;
   @OneToOne
   private User accountInformation;
-  @Column(columnDefinition = "TEXT")
-  private String companyPreferences;
-  @Column(columnDefinition = "TEXT")
+  private List<String> companyPreferences;
   private String workEnvironmentPreferences;
   @Column(columnDefinition = "TEXT")
   private String locationAndCommutePreferences;
@@ -37,4 +38,6 @@ public class Student {
   private String technicalSkillsAndInterests;
   @Column(columnDefinition = "TEXT")
   private String feedbackAndSuggestions;
+  @ManyToOne
+  private Company currentCompany;
 }

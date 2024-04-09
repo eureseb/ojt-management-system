@@ -25,13 +25,24 @@ public class UserService implements UserDetailsService {
     return user.get();
   }
 
-  public User register(String firstName, String lastName, String email, String password) {
+  public User registerStudent(String firstName, String lastName, String email, String password) {
     User user = User.builder()
         .firstName(firstName)
         .lastName(lastName)
         .username(email)
         .password(passwordEncoder.encode(password))
         .authorities(List.of("ROLE_STUDENT"))
+        .build();
+    return userRepository.save(user);
+  }
+
+  public User registerTeacher(String firstName, String lastName, String email, String password) {
+    User user = User.builder()
+        .firstName(firstName)
+        .lastName(lastName)
+        .username(email)
+        .password(passwordEncoder.encode(password))
+        .authorities(List.of("ROLE_TEACHER"))
         .build();
     return userRepository.save(user);
   }

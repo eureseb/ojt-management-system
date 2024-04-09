@@ -10,7 +10,6 @@ export default function Header() {
   useEffect(() => {
     (async () => {
       setIsLoggedIn(await fetchIsLoggedIn());
-      console.log(await fetchIsLoggedIn());
     })();
   }, [isLoggedIn]);
 

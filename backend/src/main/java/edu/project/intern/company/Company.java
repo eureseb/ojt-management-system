@@ -34,4 +34,14 @@ public class Company {
   private String contactEmail;
   @Column(columnDefinition = "TEXT")
   private String description;
+
+  private Long reviewCount;
+  @Column(columnDefinition = "TEXT")
+  private String reviewSummary;
+  private Long veryBadExperienceCount;
+  private Long badExperienceCount;
+  private Long goodExperienceCount;
+  private Long veryGoodExperienceCount;
+  private Long isRecommendedForOJTCount;
+  private Long isNotRecommendedForOJTCount;
 }

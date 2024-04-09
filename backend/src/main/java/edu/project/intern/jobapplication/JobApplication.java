@@ -35,4 +35,5 @@ public class JobApplication {
   private String coverLetterBody;
   private String resumeFileUrl;
   private LocalDateTime dateApplied;
+  private JobApplicationStatus status;
 }

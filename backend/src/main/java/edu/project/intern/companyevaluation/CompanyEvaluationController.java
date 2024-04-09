@@ -27,7 +27,7 @@ public class CompanyEvaluationController {
     }
 
     @GetMapping
-    public Page<CompanyEvaluation> getCompanyEvaluations(@RequestParam Long companyId, Pageable pageable) {
+    public Page<CompanyEvaluationDTO> getCompanyEvaluations(@RequestParam Long companyId, Pageable pageable) {
         return companyEvaluationService.getCompanyEvaluations(companyId, pageable);
     }
 }

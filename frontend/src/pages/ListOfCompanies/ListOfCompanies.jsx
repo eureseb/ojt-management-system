@@ -1,22 +1,29 @@
-import { Stack, Typography } from '@mui/joy';
+import { Stack, Autocomplete } from '@mui/joy';
 import CompanyList from './CompanyList';
-import internshipCategories from '../../mockData/internshipCategories';
-import InternshipCategories from './InternshipCategories';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { getJobListings } from '../../utils/api';
+import { getAllCompanies, getJobListings } from '../../utils/api';
 import parseJobListings from '../../utils/parseJobListings';
 import Pagination from '../../components/Pagination/Pagination';
+import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router-dom';
+import usePagination from '../../utils/usePagination';
 
 export default function ListOfCompanies() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [jobListings, setJobListings] = useState([]);
-  const [totalNumberOfPages, setTotalNumberOfPages] = useState(0);
-  const [totalNumberOfItems, setTotalNumberOfItems] = useState(0);
+  const [companies, setCompanies] = useState([]);
+  const navigate = useNavigate();
+  const {
+    totalNumberOfItems,
+    totalNumberOfPages,
+    setTotalNumberOfItems,
+    setTotalNumberOfPages,
+    currentPage,
+    onPageChange,
+  } = usePagination();
 
   useEffect(() => {
     (async () => {
-      const page = searchParams.get('page') || 1;
+      const page = currentPage;
       const {
         content: rawJobListings,
         totalElements,
@@ -27,41 +34,41 @@ export default function ListOfCompanies() {
       const jobListings = parseJobListings(rawJobListings);
       setJobListings(jobListings);
     })();
-  }, [searchParams]);
-
-  const onPageChange = (page) => {
-    setSearchParams({ page });
-  };
+    (async () => {
+      const companies = await getAllCompanies();
+      setCompanies(companies);
+    })();
+  }, [currentPage, setTotalNumberOfItems, setTotalNumberOfPages]);
 
   return (
-    <Stack gap={5} padding={5}>
-      <Stack>
-        <Typography level="h1">Hello, User</Typography>
-        <Typography level="h3">Start and find your company</Typography>
+    <Stack padding={5} gap={3} width="100%">
+      <Stack direction="row" justifyContent="space-between">
+        <Autocomplete
+          placeholder="Search for companies"
+          freeSolo
+          variant="outlined"
+          openOnFocus={false}
+          options={companies.map((company) => ({
+            label: company.name,
+            id: company.id,
+          }))}
+          disabled={companies.length === 0}
+          startDecorator={<SearchIcon />}
+          sx={{ width: '400px' }}
+          value=""
+          onChange={(_, newValue) => {
+            navigate(`/company-list/${newValue.id}`);
+          }}
+        ></Autocomplete>
+        <Pagination
+          totalPages={totalNumberOfPages}
+          currentPage={currentPage}
+          totalCount={totalNumberOfItems}
+          totalDisplayed={10}
+          onPageChange={onPageChange}
+        />
       </Stack>
-      <Stack direction="row">
-        <Stack gap={2}>
-          <Typography level="title-lg">Intern hiring in Cebu</Typography>
-          <Typography level="body-md">
-            CAT is an always-updated OJT hiring website with integration of AI
-            analytics where you can easily find job listings by locality and by
-            specialty. Here on this page, you&apos;ll be able to discover urgent
-            listings for OJT opportunities based in the Province of Cebu. Jobs
-            are sorted in several ways: according to the city they&apos;re
-            located in, according to the field or discipline they pertain to, or
-            according to the experience level needed from the candidate.
-          </Typography>
-          <Pagination
-            totalPages={totalNumberOfPages}
-            currentPage={Number(searchParams.get('page') || 1)}
-            totalCount={totalNumberOfItems}
-            totalDisplayed={10}
-            onPageChange={onPageChange}
-          />
-          <CompanyList jobListings={jobListings} />
-        </Stack>
-        <InternshipCategories internshipCategories={internshipCategories} />
-      </Stack>
+      <CompanyList jobListings={jobListings} />
     </Stack>
   );
 }

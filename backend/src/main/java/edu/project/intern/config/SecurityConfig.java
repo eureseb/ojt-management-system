@@ -37,7 +37,7 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(List.of(frontendUrl));
-    configuration.setAllowedMethods(List.of("GET", "PUT", "POST", "OPTIONS", "DELETE"));
+    configuration.setAllowedMethods(List.of("GET", "PUT", "POST", "OPTIONS", "DELETE", "PATCH"));
     configuration.setAllowCredentials(true);
     configuration.setAllowedHeaders(
         List.of(
@@ -60,7 +60,10 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             (auth) ->
-                auth.requestMatchers(HttpMethod.POST,"/student").permitAll().anyRequest().authenticated())
+                auth
+                    .requestMatchers(HttpMethod.POST,"/student").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/teacher").permitAll()
+                    .anyRequest().authenticated())
         .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(authenticationEntryPoint));
     return http.build();
   }

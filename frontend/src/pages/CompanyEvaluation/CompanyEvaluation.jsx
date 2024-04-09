@@ -9,17 +9,27 @@ import {
   Button,
   Modal,
   ModalDialog,
+  ModalOverflow,
 } from '@mui/joy';
 import Card from '../../shared/Card';
 import LockIcon from '@mui/icons-material/Lock';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CompanyEvaluationForm from './CompanyEvaluationForm';
+import { getCompanyEvaluationStatus } from '../../utils/api';
 
 export default function CompanyEvaluation() {
-  const [isMidtermEvaluationModalOpen, setIsMidtermEvaluationModalOpen] =
-    useState(false);
   const [isFinalEvaluationModalOpen, setIsFinalEvaluationModalOpen] =
     useState(false);
+
+  const [companyEvaluationStatus, setCompanyEvaluationStatus] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const companyEvaluationStatus = await getCompanyEvaluationStatus();
+      setCompanyEvaluationStatus(companyEvaluationStatus);
+    })();
+  }, []);
+
   return (
     <Stack gap={5} padding={5}>
       <Stack>
@@ -51,102 +61,78 @@ export default function CompanyEvaluation() {
           </ListItem>
         </List>
       </Stack>
-      <Card>
-        <Stack gap={2}>
-          <MuiCard variant="soft" sx={{ width: '100%' }}>
-            <Stack justifyContent="space-between" direction="row">
-              <Typography level="title-md">Midterm Evaluation</Typography>
-              <Typography level="body-sm">
-                {' '}
-                Due on Dec 31, 2024 at 11:00 PM
+      {companyEvaluationStatus && (
+        <Card>
+          <Stack gap={2}>
+            <MuiCard variant="soft" sx={{ width: '100%' }}>
+              <Stack justifyContent="space-between" direction="row">
+                <Typography level="title-md">
+                  {companyEvaluationStatus.title}
+                </Typography>
+                <Typography level="body-sm">
+                  {companyEvaluationStatus.isEnabled
+                    ? `Due on ${companyEvaluationStatus.dueDate.format(
+                        'MMM D, YYYY [at] h:mm a'
+                      )}`
+                    : ''}
+                </Typography>
+              </Stack>
+            </MuiCard>
+            <CardContent>
+              <Typography level="title-md">
+                Harness the Power of AI to Evaluate Company Internship
+                Performance
               </Typography>
-            </Stack>
-          </MuiCard>
-          <CardContent>
-            <Typography level="title-md">
-              Harness the Power of AI to Evaluate Company Internship Performance
-            </Typography>
-            <Typography level="body-sm">
-              Our cutting-edge AI algorithms delve into the depths of online
-              data, meticulously analyzing employee reviews, social media
-              conversations, and industry news to generate a comprehensive
-              sentiment analysis for each company listed on our platform. This
-              invaluable intelligence empowers you to make informed decisions
-              about your internship journey.
-            </Typography>
-          </CardContent>
-          <CardActions orientation="horizontal-reverse" buttonFlex="10px 10px">
-            <Button
-              variant="solid"
-              startDecorator={<LockIcon fontSize="small" />}
-              onClick={() => setIsMidtermEvaluationModalOpen(true)}
-            >
-              Submit Evaluation
-            </Button>
-          </CardActions>
-        </Stack>
-      </Card>
-      <Card>
-        <Stack gap={2}>
-          <MuiCard variant="soft" sx={{ width: '100%' }}>
-            <Stack justifyContent="space-between" direction="row">
-              <Typography level="title-md">Final Evaluation</Typography>
               <Typography level="body-sm">
-                {' '}
-                Due on Dec 31, 2024 at 11:00 PM
+                Our cutting-edge AI algorithms delve into the depths of online
+                data, meticulously analyzing employee reviews, social media
+                conversations, and industry news to generate a comprehensive
+                sentiment analysis for each company listed on our platform. This
+                invaluable intelligence empowers you to make informed decisions
+                about your internship journey.
               </Typography>
-            </Stack>
-          </MuiCard>
-          <CardContent>
-            <Typography level="title-md">
-              Harness the Power of AI to Evaluate Company Internship Performance
-            </Typography>
-            <Typography level="body-sm">
-              Our cutting-edge AI algorithms delve into the depths of online
-              data, meticulously analyzing employee reviews, social media
-              conversations, and industry news to generate a comprehensive
-              sentiment analysis for each company listed on our platform. This
-              invaluable intelligence empowers you to make informed decisions
-              about your internship journey.
-            </Typography>
-          </CardContent>
-          <CardActions orientation="horizontal-reverse" buttonFlex="10px 10px">
-            <Button
-              variant="solid"
-              startDecorator={<LockIcon fontSize="small" />}
-              onClick={() => setIsFinalEvaluationModalOpen(true)}
+            </CardContent>
+            <CardActions
+              orientation="horizontal-reverse"
+              buttonFlex="10px 10px"
             >
-              Submit Evaluation
-            </Button>
-          </CardActions>
-        </Stack>
-      </Card>
-      <Modal
-        open={isMidtermEvaluationModalOpen}
-        onClose={() => setIsMidtermEvaluationModalOpen(false)}
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <ModalDialog>
-          <CompanyEvaluationForm
-            evaluationTitle="Midterm Evaluation"
-            evaluationTerm="MIDTERM"
-            onSuccess={() => setIsMidtermEvaluationModalOpen(false)}
-          />
-        </ModalDialog>
-      </Modal>
-      <Modal
-        open={isFinalEvaluationModalOpen}
-        onClose={() => setIsFinalEvaluationModalOpen(false)}
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <ModalDialog>
-          <CompanyEvaluationForm
-            evaluationTitle="Final Evaluation"
-            evaluationTerm="FINAL"
-            onSuccess={() => setIsFinalEvaluationModalOpen(false)}
-          />
-        </ModalDialog>
-      </Modal>
+              <Button
+                variant="solid"
+                startDecorator={
+                  !companyEvaluationStatus.isEnabled && (
+                    <LockIcon fontSize="small" />
+                  )
+                }
+                onClick={() => setIsFinalEvaluationModalOpen(true)}
+                disabled={!companyEvaluationStatus.isEnabled}
+              >
+                Submit Evaluation
+              </Button>
+            </CardActions>
+          </Stack>
+        </Card>
+      )}
+      {companyEvaluationStatus && (
+        <Modal
+          open={isFinalEvaluationModalOpen}
+          onClose={() => setIsFinalEvaluationModalOpen(false)}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <ModalOverflow>
+            <ModalDialog>
+              <CompanyEvaluationForm
+                evaluationTitle="Final Evaluation"
+                evaluationTerm="FINAL"
+                onSuccess={() => setIsFinalEvaluationModalOpen(false)}
+              />
+            </ModalDialog>
+          </ModalOverflow>
+        </Modal>
+      )}
     </Stack>
   );
 }

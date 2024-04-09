@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SIGNIN_URL, STUDENT_SIGNUP_URL } from './links';
+import { SIGNIN_URL, STUDENT_SIGNUP_URL, TEACHER_SIGNUP_URL } from './links';
 
 export async function login(email, password) {
   const authHeader = 'Basic ' + btoa(email + ':' + password);
@@ -46,6 +46,15 @@ export function getAuthHeader() {
 
 export function registerStudent(firstName, lastName, email, password) {
   return axios.post(STUDENT_SIGNUP_URL, {
+    firstName,
+    lastName,
+    email,
+    password,
+  });
+}
+
+export function registerTeacher(firstName, lastName, email, password) {
+  return axios.post(TEACHER_SIGNUP_URL, {
     firstName,
     lastName,
     email,

@@ -3,9 +3,10 @@ import NavItem from './NavItem';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/authentication';
 import { useEffect, useState } from 'react';
-import { getLoggedInStudentInfo } from '../../utils/api';
+import { getLoggedInUserInfo } from '../../utils/api';
+import PropTypes from 'prop-types';
 
-export default function SideNav() {
+export default function SideNav({ isAdmin = false }) {
   const navigate = useNavigate();
   const [username, setUsername] = useState('Loading');
 
@@ -17,8 +18,8 @@ export default function SideNav() {
   useEffect(() => {
     (async () => {
       try {
-        const currentUser = await getLoggedInStudentInfo();
-        setUsername(currentUser.accountInformation.firstName);
+        const currentUser = await getLoggedInUserInfo();
+        setUsername(currentUser.firstName);
       } catch (e) {
         navigate('/sign-in');
       }
@@ -48,10 +49,30 @@ export default function SideNav() {
             }}
             size="md"
           >
-            <NavItem title="Dashboard" to="/dashboard" />
-            <NavItem title="OJT Requirements" to="/ojt-requirements" />
-            <NavItem title="List of Companies" to="/company-list" />
-            <NavItem title="Company Evaluation" to="/company-evaluation" />
+            {isAdmin ? (
+              <>
+                <NavItem title="Manage Students" to="/admin/manage-students" />
+                <NavItem
+                  title="Manage Applications"
+                  to="/admin/manage-applications"
+                />
+                <NavItem
+                  title="Manage Companies"
+                  to="/admin/manage-companies"
+                />
+                <NavItem
+                  title="Company Evaluation"
+                  to="/admin/manage-evaluation"
+                />
+              </>
+            ) : (
+              <>
+                <NavItem title="Dashboard" to="/dashboard" />
+                <NavItem title="OJT Requirements" to="/ojt-requirements" />
+                <NavItem title="List of Companies" to="/company-list" />
+                <NavItem title="Company Evaluation" to="/company-evaluation" />
+              </>
+            )}
           </List>
         </Stack>
         <Stack padding={3} alignItems="center">
@@ -64,4 +85,6 @@ export default function SideNav() {
   );
 }
 
-SideNav.propTypes = {};
+SideNav.propTypes = {
+  isAdmin: PropTypes.bool,
+};

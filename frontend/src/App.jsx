@@ -10,6 +10,10 @@ import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 import AccountSetUp from './pages/AccountSetUp/AccountSetUp';
 import Company from './pages/Company/Company';
+import ManageStudents from './pages/ManageStudents/ManageStudents';
+import ManageApplications from './pages/ManageApplications/ManageApplications';
+import ManageCompanies from './pages/ManageCompanies.jsx/ManageCompanies';
+import ManageEvaluation from './pages/ManageEvaluation/ManageEvaluation';
 
 const router = createBrowserRouter([
   {
@@ -51,6 +55,26 @@ const router = createBrowserRouter([
     path: '/account-set-up',
     element: <LandingLayout />,
     children: [{ index: true, element: <AccountSetUp /> }],
+  },
+  {
+    path: '/admin/manage-applications',
+    element: <MainLayout isAdmin />,
+    children: [{ index: true, element: <ManageApplications /> }],
+  },
+  {
+    path: '/admin/manage-students',
+    element: <MainLayout isAdmin />,
+    children: [{ index: true, element: <ManageStudents /> }],
+  },
+  {
+    path: '/admin/manage-companies',
+    element: <MainLayout isAdmin />,
+    children: [{ index: true, element: <ManageCompanies /> }],
+  },
+  {
+    path: '/admin/manage-evaluation',
+    element: <MainLayout isAdmin />,
+    children: [{ index: true, element: <ManageEvaluation /> }],
   },
   {
     path: '/',

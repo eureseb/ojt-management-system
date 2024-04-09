@@ -57,7 +57,7 @@ export default function CompanyApplyForm({
           </Chip>
         ))}
       </Stack>
-      <Typography level="body-sm">
+      <Typography level="body-md">
         <Typography fontWeight="lg">Tags</Typography>: scrum team,
         collaboration, development, process improvement, shippable increment,
         end-user requirements, testing, deployment, troubleshooting, debugging,
@@ -68,11 +68,11 @@ export default function CompanyApplyForm({
       <Card variant="outlined">
         <CardContent>
           <Input
-            size="sm"
+            size="lg"
             variant="plain"
             disabled
             startDecorator={
-              <Typography level="body-sm" fontWeight="lg">
+              <Typography level="body-lg" fontWeight="lg">
                 To:
               </Typography>
             }
@@ -80,10 +80,10 @@ export default function CompanyApplyForm({
           />
           <Divider />
           <Input
-            size="sm"
+            size="lg"
             variant="plain"
             startDecorator={
-              <Typography level="body-sm" fontWeight="lg">
+              <Typography level="body-lg" fontWeight="lg">
                 Subject:
               </Typography>
             }
@@ -94,7 +94,7 @@ export default function CompanyApplyForm({
           <Textarea
             minRows={10}
             variant="plain"
-            size="sm"
+            size="lg"
             value={body}
             onChange={(e) => setBody(e.target.value)}
           />
@@ -108,11 +108,12 @@ export default function CompanyApplyForm({
           variant="outlined"
           color="neutral"
           startDecorator={<UploadIcon />}
+          size="lg"
         >
           Upload Resume
           <VisuallyHiddenInput type="file" />
         </Button>
-        <Button variant="solid" size="md" onClick={handleApply}>
+        <Button variant="solid" size="lg" onClick={handleApply}>
           Apply
         </Button>
       </Stack>

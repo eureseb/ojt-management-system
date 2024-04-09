@@ -8,6 +8,7 @@ import {
   ModalDialog,
   Stack,
   Typography,
+  ModalOverflow,
 } from '@mui/joy';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -15,6 +16,8 @@ import CompanyApplyForm from './CompanyApplyForm';
 import Card from '../../shared/Card';
 import timeAgo from '../../utils/timeAgo';
 import { Link } from 'react-router-dom';
+import recommendedCompanies from '../../mockData/recommendedCompanies';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 export default function CompanyListCard({
   companyName,
@@ -30,12 +33,21 @@ export default function CompanyListCard({
   companyId,
 }) {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const isCompanySuggested = recommendedCompanies.includes(companyId);
 
   return (
-    <Card>
+    <Card color={isCompanySuggested ? 'var(--joy-palette-success-400)' : ''}>
       <Stack width="100%">
         <CardContent orientation="horizontal">
           <Stack width="50%" alignItems="flex-start" gap={2}>
+            {isCompanySuggested && (
+              <Stack direction="row" alignItems="center" gap={1}>
+                <AutoAwesomeIcon color="success" fontSize="small" />
+                <Typography level="title-sm" color="success">
+                  Suggested Company
+                </Typography>
+              </Stack>
+            )}
             <Link
               to={`/company-list/${companyId}`}
               style={{ textDecoration: 'none' }}
@@ -73,7 +85,11 @@ export default function CompanyListCard({
           </Stack>
         </CardContent>
         <CardActions orientation="horizontal-reverse" buttonFlex="10px 10px">
-          <Button variant="solid" onClick={() => setIsApplyModalOpen(true)}>
+          <Button
+            variant="solid"
+            onClick={() => setIsApplyModalOpen(true)}
+            color={isCompanySuggested ? 'success' : 'primary'}
+          >
             Apply
           </Button>
         </CardActions>
@@ -83,16 +99,18 @@ export default function CompanyListCard({
         onClose={() => setIsApplyModalOpen(false)}
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
       >
-        <ModalDialog>
-          <ModalClose />
-          <CompanyApplyForm
-            companyName={companyName}
-            tags={tags}
-            contactEmail={contactEmail}
-            jobListingId={jobListingId}
-            onSuccess={() => setIsApplyModalOpen(false)}
-          />
-        </ModalDialog>
+        <ModalOverflow>
+          <ModalDialog>
+            <ModalClose />
+            <CompanyApplyForm
+              companyName={companyName}
+              tags={tags}
+              contactEmail={contactEmail}
+              jobListingId={jobListingId}
+              onSuccess={() => setIsApplyModalOpen(false)}
+            />
+          </ModalDialog>
+        </ModalOverflow>
       </Modal>
     </Card>
   );

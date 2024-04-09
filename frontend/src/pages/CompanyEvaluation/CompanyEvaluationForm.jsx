@@ -55,20 +55,20 @@ export default function CompanyEvaluationForm({
   return (
     <Stack gap={2} maxWidth="800px">
       <MuiCard variant="soft" sx={{ width: '100%' }}>
-        <Typography level="title-md">{evaluationTitle}</Typography>
+        <Typography level="title-lg">{evaluationTitle}</Typography>
       </MuiCard>
       <Typography level="body-sm"> Due on Dec 31, 2024 at 11:00 PM</Typography>
-      <Typography level="title-md">
+      <Typography level="title-lg">
         Harness the Power of AI to Evaluate Company Internship Performance
       </Typography>
-      <Typography level="body-sm">
+      <Typography level="body-lg">
         Our cutting-edge AI algorithms delve into the depths of online data,
         meticulously analyzing employee reviews, social media conversations, and
         industry news to generate a comprehensive sentiment analysis for each
         company listed on our platform. This invaluable intelligence empowers
         you to make informed decisions about your internship journey.
       </Typography>
-      <FormControl>
+      <FormControl size="lg">
         <FormLabel>Company Name</FormLabel>
         <Autocomplete
           placeholder="Enter your answer"
@@ -78,12 +78,11 @@ export default function CompanyEvaluationForm({
           }))}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           variant="soft"
-          size="sm"
           value={selectedCompany}
           onChange={(e, option) => setSelectedCompany(option)}
         />
       </FormControl>
-      <FormControl>
+      <FormControl size="lg">
         <FormLabel>
           Would you recommend IT/CS students to their OJT in this company
         </FormLabel>
@@ -93,22 +92,21 @@ export default function CompanyEvaluationForm({
           value={isRecommendedForOJT}
           onChange={(e) => setIsRecommendedForOJT(e.target.value)}
         >
-          <Radio value={true} label="Yes" size="sm" />
-          <Radio value={false} label="No" size="sm" />
+          <Radio value={true} label="Yes" />
+          <Radio value={false} label="No" />
         </RadioGroup>
       </FormControl>
-      <FormControl>
+      <FormControl size="lg">
         <FormLabel>Tell us why or why not?</FormLabel>
         <Textarea
           minRows={4}
           variant="soft"
           placeholder="Enter your answer"
-          size="sm"
           value={isRecommendedForOJTReason}
           onChange={(e) => setIsRecommendedForOJTReason(e.target.value)}
         ></Textarea>
       </FormControl>
-      <FormControl>
+      <FormControl size="lg">
         <FormLabel>How will you rate your experience?</FormLabel>
         <RadioGroup
           defaultValue="medium"
@@ -116,13 +114,13 @@ export default function CompanyEvaluationForm({
           value={experienceEvaluation}
           onChange={(e) => setExperienceEvaluation(e.target.value)}
         >
-          <Radio value="VERY_GOOD" label="Very Good" size="sm" />
-          <Radio value="GOOD" label="Good" size="sm" />
-          <Radio value="BAD" label="Bad" size="sm" />
-          <Radio value="VERY_BAD" label="Very Bad" size="sm" />
+          <Radio value="VERY_GOOD" label="Very Good" />
+          <Radio value="GOOD" label="Good" />
+          <Radio value="BAD" label="Bad" />
+          <Radio value="VERY_BAD" label="Very Bad" />
         </RadioGroup>
       </FormControl>
-      <FormControl>
+      <FormControl size="lg">
         <FormLabel>
           Share your experience while training in this company.
         </FormLabel>
@@ -130,7 +128,6 @@ export default function CompanyEvaluationForm({
           minRows={4}
           variant="soft"
           placeholder="Enter your answer"
-          size="sm"
           value={experienceWithCompany}
           onChange={(e) => setExperienceWithCompany(e.target.value)}
         ></Textarea>
@@ -140,7 +137,9 @@ export default function CompanyEvaluationForm({
         </FormHelperText>
       </FormControl>
       <CardActions orientation="horizontal-reverse" buttonFlex="10px 10px">
-        <Button onClick={onSubmit}>Submit</Button>
+        <Button onClick={onSubmit} size="lg">
+          Submit
+        </Button>
       </CardActions>
     </Stack>
   );

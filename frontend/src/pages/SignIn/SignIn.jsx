@@ -12,6 +12,8 @@ import {
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../utils/authentication';
+import { getLoggedInUserInfo, getRole } from '../../utils/api';
+import { Roles } from '../../utils/constants';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
@@ -21,7 +23,9 @@ export default function SignIn() {
   const handleSignIn = async () => {
     try {
       await login(email, password);
-      navigate('/dashboard');
+      const role = await getRole();
+      if (role == Roles.STUDENT) navigate('/dashboard');
+      else if (role == Roles.TEACHER) navigate('/admin/manage-students');
     } catch (e) {
       console.error(e);
     }
