@@ -1,6 +1,6 @@
 @AI_HostAddress = http://localhost:5226
 
-GET {{AI_HostAddress}}/weatherforecast/
+GET {{AI_HostAddress}}/int/
 Accept: application/json
 
 ###
