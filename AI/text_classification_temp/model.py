@@ -1,11 +1,41 @@
-from tensorflow.keras.models import load_model
+import tensorflow as tf
+import pandas as pd
+import numpy as np
+import re
+
+# Dummy comments
+comments = [
+    "This company is great. they have really understanding mentors and has a good environment. Overall my experience with the company is great"
+]
+
+df = pd.DataFrame({'Comments': comments})
+comments = np.array(df['Comments'].values)
+
+# Text Preprocessing
+def clean_text(text):
+    text = text.lower() # Convert text to lowercase
+    text = re.sub(r'[^a-zA-Z\s]', '', text) # Remove special characters, punctuation, and numbers
+    return text
+
+cleaned_comments = [clean_text(comment) for comment in comments]
 
 # Load Model
-model = load_model(r'../model');
+model = tf.saved_model.load('AI\model')
 
-'''
-# Make Predictions
-predictions = model.predict(comments)
+# Get the inference function from the loaded model
+inference = model.signatures["serving_default"]
+
+# Perform inference
+output = inference(tf.constant(cleaned_comments))
+
+# Assuming 'output' contains the dictionary with the TensorFlow tensor
+tensor_value = output['reshape']  # Accessing the tensor from the dictionary
+
+# Convert the TensorFlow tensor to a NumPy array
+output_array = tensor_value.numpy()
+
+# Extract predictions from the output
+predictions = output_array
 
 # Normalization Function
 def min_max_normalization(x):
@@ -31,4 +61,4 @@ for comment, prediction in zip(comments, predictions):
     print("WebDevelopment: %.2f" % (normalized_prediction[0][12]*100), '%')
     print("ProjectManagement: %.2f" % (normalized_prediction[0][13]*100), '%')
     print("GoodEnvironment: %.2f" % (normalized_prediction[0][14]*100), '%')
-    print()'''
+    print()
