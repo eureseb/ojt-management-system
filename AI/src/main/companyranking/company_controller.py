@@ -4,7 +4,7 @@ from .company_service import CompanyService
 company_bp = Blueprint('company', __name__)
 company_service = CompanyService()
 
-@company_bp.route('/api', methods=['GET'])
+@company_bp.route('/companyranking', methods=['GET'])
 def get_company_rankings():
     companies = company_service.get_company_rankings()
     # Convert Company objects to dictionaries before jsonify
