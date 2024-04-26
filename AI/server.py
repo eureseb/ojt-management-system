@@ -32,9 +32,13 @@ def teardown_appcontext(exception=None):
 def get_data():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM your_table;")
+    cursor.execute("SELECT * FROM CompanyEvaluation;")
     data = cursor.fetchall()
     return jsonify(data)
+
+@app.route('/api/get_data')
+def get_data_route():
+    return get_data()
 
 # Register blueprints
 app.register_blueprint(company_bp, url_prefix='/api/')
@@ -42,3 +46,4 @@ app.register_blueprint(companysuggestion_bp, url_prefix='/api/')
 
 if __name__ == '__main__':
     app.run(port=8010)
+

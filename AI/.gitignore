@@ -1,5 +1,2 @@
-node_modules/
-.env
-build/
-bin
-obj
+src/main/companyranking/__pycache__/
+src/main/companysuggestion/__pycache__/
