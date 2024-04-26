@@ -32,7 +32,7 @@ def teardown_appcontext(exception=None):
 def get_data():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM CompanyEvaluation;")
+    cursor.execute("SELECT c.experienceWithCompany FROM CompanyEvaluation c WHERE c.company.id = 1")
     data = cursor.fetchall()
     return jsonify(data)
 
