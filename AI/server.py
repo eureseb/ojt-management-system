@@ -25,8 +25,6 @@ def close_db():
         db.close()
     print("Closed DB connection")
 
-db = get_db()
-
 @app.teardown_appcontext
 def teardown_appcontext(exception=None):
     close_db()
