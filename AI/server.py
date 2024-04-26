@@ -29,6 +29,13 @@ def close_db():
 def teardown_appcontext(exception=None):
     close_db()
 
+def get_data():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM your_table;")
+    data = cursor.fetchall()
+    return jsonify(data)
+
 # Register blueprints
 app.register_blueprint(company_bp, url_prefix='/api/')
 app.register_blueprint(companysuggestion_bp, url_prefix='/api/')
