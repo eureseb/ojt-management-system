@@ -3,6 +3,6 @@ from dataclasses import dataclass
 @dataclass
 class Company:
     companyID: int
-    name: str
+    experience_evaluation: str
     tags: dict
     rank: int

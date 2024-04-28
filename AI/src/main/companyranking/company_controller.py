@@ -26,7 +26,7 @@ def get_company_evaluation_data():
     company_id = request.args.get('company_id')
     if not company_id:
         return jsonify({"error": "Company ID is required"}), 400
-
+    
     # Call the CompanyService method to retrieve evaluation data
     evaluation_data = company_service.get_company_evaluation_data(company_id)
     if evaluation_data:
@@ -34,5 +34,7 @@ def get_company_evaluation_data():
     else:
         return jsonify({"error": "Failed to retrieve evaluation data"}), 404
 
+
+  
 
 

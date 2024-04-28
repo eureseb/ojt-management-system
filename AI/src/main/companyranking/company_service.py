@@ -1,21 +1,38 @@
 from .company import Company
-import requests
+from db import get_db
 
 class CompanyService:
     def __init__(self):
-        # Dummy data for demonstration
-        self.companies = [
-            Company(
-                companyID=1,
-                name="Company A",
-                tags=["ProfessionalEnvironment", "NewKnowledge", "Selflearning",
-                      "IndustryExperience", "PleasantExperience", "GreatExperience",
-                      "GoodMentors", "SystemsDevelopment", "Allowance",
-                      "PoorHandling", "UnpleasantExperience", "ChallengingExperience",
-                      "WebDevelopment", "ProjectManagement", "GoodEnvironment"],
-                rank=1,
-            )
-        ]
+        self.populate_companies()
+
+    def populate_companies(self):
+        try:
+            db = get_db()
+            cursor = db.cursor()
+            cursor.execute("SELECT * FROM company_evaluation")
+            data = cursor.fetchall()
+            self.companies = []
+            for entry in data:
+                company_id = entry[1]
+                experience_evaluation = entry[5]
+                # Create a Company object
+                company = Company(
+                    companyID=company_id,
+                    experience_evaluation=experience_evaluation,
+                    tags=[
+                        "ProfessionalEnvironment", "NewKnowledge", "Selflearning",
+                        "IndustryExperience", "PleasantExperience", "GreatExperience",
+                        "GoodMentors", "SystemsDevelopment", "Allowance",
+                        "PoorHandling", "UnpleasantExperience", "ChallengingExperience",
+                        "WebDevelopment", "ProjectManagement", "GoodEnvironment"
+                    ],
+                    rank=1  # Placeholder value, you may update this based on evaluation status
+                )
+                self.companies.append(company)
+        except Exception as e:
+            # Handle any exceptions
+            print(f"Failed to fetch company data from database: {e}")
+            self.companies = []  # Set companies to an empty list to avoid potential issues
 
     def get_company_rankings(self):
         return self.companies
@@ -27,12 +44,3 @@ class CompanyService:
             if all(tag in company.tags for tag in tags):
                 return company.companyID
         return None
-    
-    def get_company_evaluation_data(self, company_id):
-        # Make a GET request to the Java endpoint to retrieve company evaluation data
-        response = requests.get(f'http://localhost:8080/company-evaluations?companyId={company_id}')
-        if response.status_code == 200:
-            return response.json()
-        else:
-            # Handle error response
-            return None
