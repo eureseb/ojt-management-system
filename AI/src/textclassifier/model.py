@@ -20,7 +20,7 @@ def clean_text(text):
 cleaned_comments = [clean_text(comment) for comment in comments]
 
 # Load Model
-model = tf.saved_model.load('AI\model')
+model = tf.saved_model.load('.\model')
 
 # Get the inference function from the loaded model
 inference = model.signatures["serving_default"]
