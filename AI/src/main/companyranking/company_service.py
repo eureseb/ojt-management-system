@@ -15,38 +15,42 @@ class CompanyService:
                 cursor = db.cursor()
                 cursor.execute("SELECT * FROM company_evaluation")
                 data = cursor.fetchall()
-                serialized_data = jsonify(data)
-                self.companies = []
+                self.companies = {}
                 for entry in data:
                     company_id = entry[1]
                     experience_evaluation = entry[5]
-                    # Create a Company object
-                    company = Company(
-                        companyID=company_id,
-                        experience_evaluation=experience_evaluation,
-                        tags=[
-                            "ProfessionalEnvironment", "NewKnowledge", "Selflearning",
-                            "IndustryExperience", "PleasantExperience", "GreatExperience",
-                            "GoodMentors", "SystemsDevelopment", "Allowance",
-                            "PoorHandling", "UnpleasantExperience", "ChallengingExperience",
-                            "WebDevelopment", "ProjectManagement", "GoodEnvironment"
-                        ],
-                        rank=1  # Placeholder value, you may update this based on evaluation status
-                    )
-                    self.companies.append(company)
+                    if company_id not in self.companies:
+                        # If the company doesn't exist, create a new Company object
+                        company = Company(
+                            companyID=company_id,
+                            tags=[
+                                "ProfessionalEnvironment", "NewKnowledge", "Selflearning",
+                                "IndustryExperience", "PleasantExperience", "GreatExperience",
+                                "GoodMentors", "SystemsDevelopment", "Allowance",
+                                "PoorHandling", "UnpleasantExperience", "ChallengingExperience",
+                                "WebDevelopment", "ProjectManagement", "GoodEnvironment"
+                            ],
+                            rank=1,  # Placeholder value, you may update this based on evaluation status
+                            experience_evaluation=[experience_evaluation]  # List to store evaluations
+                        )
+                        self.companies[company_id] = company
+                    else:
+                        # If the company already exists, append the evaluation to its list
+                        self.companies[company_id].experience_evaluation.append(experience_evaluation)
                     print("Data Successfully fetched")
             except Exception as e:
                 # Handle any exceptions
                 print(f"Failed to fetch company data from database: {e}")
-                self.companies = []  # Set companies to an empty list to avoid potential issues
+                self.companies = {}  # Set companies to an empty dict to avoid potential issues
 
     def get_company_rankings(self):
-        return self.companies
+        # Convert the dictionary values to a list of Company objects
+        return list(self.companies.values())
 
     def get_company_id_by_tags(self, tags):
         # Logic to retrieve company ID based on provided tags
         # For simplicity, let's assume it returns the company ID of the first company with matching tags
-        for company in self.companies:
+        for company_id, company in self.companies.items():
             if all(tag in company.tags for tag in tags):
-                return company.companyID
+                return company_id
         return None
