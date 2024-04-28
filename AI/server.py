@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, jsonify
 import psycopg2
 from src.main.companyranking.company_controller import company_bp
 from src.main.companysuggestion.companysuggestion_controller import companysuggestion_bp
@@ -6,7 +6,7 @@ from src.main.companysuggestion.companysuggestion_controller import companysugge
 app = Flask(__name__)
 
 DATABASE = {
-    'dbname': 'intern_db',
+    'dbname': 'postgres',
     'user': 'postgres',
     'password': 'postgres',
     'host': 'localhost',
@@ -32,7 +32,7 @@ def teardown_appcontext(exception=None):
 def get_data():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT c.experienceWithCompany FROM CompanyEvaluation c WHERE c.company.id = 1")
+    cursor.execute("SELECT * FROM company_evaluation")
     data = cursor.fetchall()
     return jsonify(data)
 
