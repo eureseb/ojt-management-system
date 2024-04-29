@@ -107,10 +107,3 @@ def generate_tags(comments_data):
                 tags.append("Good Environment")
     
     return tags
-
-comments_data = ['this company is great, the mentors are understanding and the environment is great']
-
-tags = generate_tags(comments_data)
-
-for tag in tags:
-    print(tag)
