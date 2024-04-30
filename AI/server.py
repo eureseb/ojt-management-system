@@ -14,5 +14,4 @@ app.register_blueprint(company_bp, url_prefix='/api/')
 app.register_blueprint(companysuggestion_bp, url_prefix='/api/')
 
 if __name__ == '__main__':
-    app.run(port=8010)
-
+    app.run(host='0.0.0.0', port='8010')

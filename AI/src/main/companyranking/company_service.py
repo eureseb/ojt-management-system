@@ -1,7 +1,6 @@
 from flask import Flask, jsonify
 from .company import Company
 from db import get_db
-from ..textclassifier.textclassifier import generate_tags
 
 app = Flask(__name__)
 
@@ -20,16 +19,23 @@ class CompanyService:
                 for entry in data:
                     company_id = entry[1]
                     experience_evaluation = entry[5]
+                    comments = []
+                    for e in data:
+                        if company_id == e[1]:
+                            print("Comment got")
+                            comments.append(e[5])
+                    
                     if company_id not in self.companies:
-                        comments = []
-                        for entry in data:
-                            if company_id == entry[1]:
-                                comments.append(entry[5])
-                        generated_tags = generate_tags(comments)
                         # If the company doesn't exist, create a new Company object
                         company = Company(
                             companyID=company_id,
-                            tags=generated_tags,
+                            tags=[
+                                "ProfessionalEnvironment", "NewKnowledge", "Selflearning",
+                                "IndustryExperience", "PleasantExperience", "GreatExperience",
+                                "GoodMentors", "SystemsDevelopment", "Allowance",
+                                "PoorHandling", "UnpleasantExperience", "ChallengingExperience",
+                                "WebDevelopment", "ProjectManagement", "GoodEnvironment"
+                            ],
                             rank=1,  # Placeholder value, you may update this based on evaluation status
                             experience_evaluation=[experience_evaluation]  # List to store evaluations
                         )

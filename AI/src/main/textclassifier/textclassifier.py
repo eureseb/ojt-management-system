@@ -4,6 +4,9 @@ import numpy as np
 import re
 
 def generate_tags(comments_data):
+    return tags(comments_data)
+
+def tags(comments_data):
     # feed a list of comments
     df = pd.DataFrame({'Comments': comments_data})
     comments = np.array(df['Comments'].values)
@@ -17,7 +20,7 @@ def generate_tags(comments_data):
     cleaned_comments = [clean_text(comment) for comment in comments]
 
     # Load Model
-    model = tf.saved_model.load('.\model')
+    model = tf.saved_model.load('AI\src\main\textclassifier\model')
 
     # Get the inference function from the loaded model
     inference = model.signatures["serving_default"]
@@ -42,6 +45,7 @@ def generate_tags(comments_data):
 
     # Display Predictions
     for comment, prediction in zip(comments, predictions):
+        print("Tags got")
         normalized_prediction = min_max_normalization(prediction)
         
         tag01 = normalized_prediction[0][0]*100
