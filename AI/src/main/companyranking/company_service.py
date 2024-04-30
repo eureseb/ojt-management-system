@@ -12,7 +12,7 @@ app = Flask(__name__)
 class CompanyService:
     def __init__(self):
         self.populate_companies()
-        self.insertTags()
+        self.insert_tags()
 
     def populate_companies(self):
         with app.app_context():
@@ -24,16 +24,20 @@ class CompanyService:
                 self.companies = {}
                 self.company_comments = {}
 
+                # Iterate through evaluations
                 for entry in data:
                     company_id = entry[1]
                     experience_evaluation = entry[5]
                     comment_dict = []
 
+                    # Compile comments from specific companies
                     for e in data:
                         if company_id == e[1]:
                             comment_dict.append(e[6])
 
+                    # Add unique companies and all its comments into dictionaries
                     if company_id not in self.companies:
+                        # Comments from company with id: <company_id>
                         comments = CompanyComment(
                             companyID=company_id,
                             comment=comment_dict
@@ -44,21 +48,22 @@ class CompanyService:
                         company = Company(
                             companyID=company_id,
                             tags=[],
-                            rank=1,  # Placeholder value, you may update this based on evaluation status
+                            rank=0,
                             experience_evaluation=[experience_evaluation]  # List to store evaluations
                         )
                         self.companies[company_id] = company
                     else:
                         # If the company already exists, append the evaluation to its list
                         self.companies[company_id].experience_evaluation.append(experience_evaluation)
-                    print("Data Successfully fetched")
             except Exception as e:
                 # Handle any exceptions
                 print(f"Failed to fetch company data from database: {e}")
                 self.companies = {}  # Set companies to an empty dict to avoid potential issues
                 self.company_comments = {}
 
-    def insertTags(self):
+        print("Data Successfully fetched")
+
+    def insert_tags(self):
         for company_id, company_comment in self.company_comments.items():
             for comment in company_comment.comment:
                 # print(comment)
