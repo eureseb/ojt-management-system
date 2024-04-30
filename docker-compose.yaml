@@ -52,7 +52,7 @@ services:
     image: ai
     container_name: ai
     depends_on:
-      - postgresql
+      - frontend
     ports:
       - 8010:8010
     networks:

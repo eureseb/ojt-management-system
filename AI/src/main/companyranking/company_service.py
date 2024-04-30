@@ -1,30 +1,18 @@
-from flask import Flask, jsonify
+from flask import Flask
 from .company import Company
 from .companycomment import CompanyComment
 from db import get_db
 from ..textclassifier.textclassifier import generate_tags
+import time
+
+time.sleep(5)
 
 app = Flask(__name__)
 
 class CompanyService:
     def __init__(self):
         self.populate_companies()
-        for company_id, company_comment in self.company_comments.items():
-            print(f"Company ID: {company_id}")
-            print("Comments:")
-            for comment in company_comment.comment:
-                print(comment)
-        
-            company = self.companies.get(company_id)
-            tags = generate_tags(company_comment.comment)
-            
-            # Check if the company exists
-            if company:
-                # Append the tag value to the 'tags' attribute
-                company.tags.append(tags)
-            else:
-                # Handle case where company does not exist
-                print(f"Company with ID {company_id} does not exist.")
+        self.insertTags()
 
     def populate_companies(self):
         with app.app_context():
@@ -35,6 +23,7 @@ class CompanyService:
                 data = cursor.fetchall()
                 self.companies = {}
                 self.company_comments = {}
+
                 for entry in data:
                     company_id = entry[1]
                     experience_evaluation = entry[5]
@@ -67,6 +56,21 @@ class CompanyService:
                 # Handle any exceptions
                 print(f"Failed to fetch company data from database: {e}")
                 self.companies = {}  # Set companies to an empty dict to avoid potential issues
+                self.company_comments = {}
+
+    def insertTags(self):
+        for company_id, company_comment in self.company_comments.items():
+            for comment in company_comment.comment:
+                # print(comment)
+                pass
+        
+            company = self.companies.get(company_id)
+            tags = generate_tags(company_comment.comment)
+            
+            # Check if the company exists
+            if company:
+                # Append the tag value to the 'tags' attribute
+                company.tags = tags
 
     def get_company_rankings(self):
         # Convert the dictionary values to a list of Company objects

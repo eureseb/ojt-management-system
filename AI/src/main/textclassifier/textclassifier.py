@@ -45,7 +45,6 @@ def tags(comments_data):
 
     # Display Predictions
     for comment, prediction in zip(comments, predictions):
-        print("Tags got")
         normalized_prediction = min_max_normalization(prediction)
         
         tag01 = normalized_prediction[0][0]*100
