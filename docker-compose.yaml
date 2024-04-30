@@ -15,19 +15,6 @@ services:
       timeout: 5s
       retries: 15
 
-  AI:
-    build:
-      context: ./AI
-      dockerfile: Dockerfile
-    image: ai
-    container_name: ai
-    depends_on:
-      - postgresql
-    ports:
-      - 8010:8010
-    networks:
-      - intern
-
   backend:
     build:
       context: ./backend
@@ -55,6 +42,19 @@ services:
       - ./dockercompose/env/frontend.env
     depends_on:
       - backend
+    networks:
+      - intern
+
+  AI:
+    build:
+      context: ./AI
+      dockerfile: Dockerfile
+    image: ai
+    container_name: ai
+    depends_on:
+      - postgresql
+    ports:
+      - 8010:8010
     networks:
       - intern
 

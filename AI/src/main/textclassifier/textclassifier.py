@@ -20,7 +20,7 @@ def tags(comments_data):
     cleaned_comments = [clean_text(comment) for comment in comments]
 
     # Load Model
-    model = tf.saved_model.load('AI\src\main\textclassifier\model')
+    model = tf.saved_model.load('/app/src/main/textclassifier/model')
 
     # Get the inference function from the loaded model
     inference = model.signatures["serving_default"]
