@@ -5,6 +5,7 @@ from src.main.companysuggestion.companysuggestion_controller import companysugge
 
 app = Flask(__name__)
 
+# defining teardown function
 @app.teardown_appcontext
 def teardown_appcontext(exception=None):
     close_db()
@@ -13,5 +14,6 @@ def teardown_appcontext(exception=None):
 app.register_blueprint(company_bp, url_prefix='/api/')
 app.register_blueprint(companysuggestion_bp, url_prefix='/api/')
 
+# Start Server
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='8010')

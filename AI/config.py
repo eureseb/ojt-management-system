@@ -1,3 +1,4 @@
+# DD Connection Configuration
 DATABASE = {
     'dbname': 'postgres',
     'user': 'postgres',

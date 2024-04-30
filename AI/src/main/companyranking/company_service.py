@@ -5,15 +5,21 @@ from db import get_db
 from ..textclassifier.textclassifier import generate_tags
 import time
 
+# delay for db connection
 time.sleep(5)
 
 app = Flask(__name__)
 
 class CompanyService:
     def __init__(self):
+        # fetch Company Evaluations
         self.populate_companies()
+        # Generate and Insert tags into Companies
         self.insert_tags()
+        # Rank companies
+        # self.rank_companies()
 
+    # Fetching evaluation data
     def populate_companies(self):
         with app.app_context():
             try:
@@ -21,6 +27,7 @@ class CompanyService:
                 cursor = db.cursor()
                 cursor.execute("SELECT * FROM company_evaluation")
                 data = cursor.fetchall()
+
                 self.companies = {}
                 self.company_comments = {}
 
@@ -42,15 +49,17 @@ class CompanyService:
                             companyID=company_id,
                             comment=comment_dict
                         )
+                        # Insert into comments dict
                         self.company_comments[company_id] = comments
 
-                        # If the company doesn't exist, create a new Company object
+                        # New Company Object
                         company = Company(
                             companyID=company_id,
                             tags=[],
                             rank=0,
-                            experience_evaluation=[experience_evaluation]  # List to store evaluations
+                            experience_evaluation=[experience_evaluation]
                         )
+                        # Insert into companies dict
                         self.companies[company_id] = company
                     else:
                         # If the company already exists, append the evaluation to its list
@@ -58,23 +67,20 @@ class CompanyService:
             except Exception as e:
                 # Handle any exceptions
                 print(f"Failed to fetch company data from database: {e}")
-                self.companies = {}  # Set companies to an empty dict to avoid potential issues
+                self.companies = {}
                 self.company_comments = {}
 
         print("Data Successfully fetched")
 
+    # Feeding comment batches based on <comany_id> into AI Model and updating company tags
     def insert_tags(self):
         for company_id, company_comment in self.company_comments.items():
-            for comment in company_comment.comment:
-                # print(comment)
-                pass
-        
             company = self.companies.get(company_id)
             tags = generate_tags(company_comment.comment)
             
             # Check if the company exists
             if company:
-                # Append the tag value to the 'tags' attribute
+                # Set Company Tags
                 company.tags = tags
 
     def get_company_rankings(self):
