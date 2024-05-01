@@ -2,12 +2,13 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 import re
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 def generate_tags(comments_data):
     return tags(comments_data)
 
-def generate_score(companies_data):
-    return score(companies_data)
+def generate_score(comments_data):
+    return score(comments_data)
 
 def tags(comments_data):
     # feed a list of comments
@@ -114,5 +115,36 @@ def tags(comments_data):
     
     return tags
 
-def score(companies_data):
-    return 0
+def score(comments_data):
+    df = pd.DataFrame({'Comments': comments_data})
+    comments = np.array(df['Comments'].values)
+
+    # Text Preprocessing
+    def clean_text(text):
+        text = text.lower() # Convert text to lowercase
+        text = re.sub(r'[^a-zA-Z\s]', '', text) # Remove special characters, punctuation, and numbers
+        return text
+    
+    positive_score = 0
+    neutral_score = 0
+    negative_score = 0
+    weighted_composite_score = 0
+
+    sentiment_analyzer = SentimentIntensityAnalyzer()
+    cleaned_comments = [clean_text(comment) for comment in comments]
+
+    for comment in cleaned_comments:
+        sentiment_scores = sentiment_analyzer.polarity_scores(comment)
+
+        positive_score += sentiment_scores['pos']
+        neutral_score += sentiment_scores['neu']
+        negative_score += sentiment_scores['neg']
+        weighted_composite_score += sentiment_scores['compound']
+
+    positive_score = positive_score/len(cleaned_comments)
+    neutral_score = neutral_score/len(cleaned_comments)
+    negative_score = negative_score/len(cleaned_comments)
+    weighted_composite_score = weighted_composite_score/len(cleaned_comments)
+
+    print(weighted_composite_score)
+    return weighted_composite_score * 100
