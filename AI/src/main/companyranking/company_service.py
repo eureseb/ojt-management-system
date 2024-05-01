@@ -2,7 +2,7 @@ from flask import Flask
 from .company import Company
 from .companycomment import CompanyComment
 from db import get_db
-from ..textclassifier.textclassifier import generate_tags
+from ..textclassifier.textclassifier import generate_tags, generate_score
 import time
 
 # delay for db connection
@@ -17,7 +17,7 @@ class CompanyService:
         # Generate and Insert tags into Companies
         self.insert_tags()
         # Rank companies
-        # self.rank_companies()
+        self.insert_rank()
 
     # Fetching evaluation data
     def populate_companies(self):
@@ -82,6 +82,25 @@ class CompanyService:
             if company:
                 # Set Company Tags
                 company.tags = tags
+        
+        print("Tags Generated")
+    
+    def insert_rank(self):
+        self.company_scores = {}
+        for company_id, company_comment in self.company_comments.items():
+            score = generate_score(company_comment.comment)
+            self.company_scores[company_id] = score
+        
+        sorted_scores = sorted(self.company_scores.items(), key=lambda x: x[1])
+
+        # Assign ranks starting from 1
+        rank = 1
+        for company_id, score in sorted_scores:
+            # Update the rank for the corresponding Company object
+            self.companies[company_id].rank = rank
+            rank += 1
+        
+        print("Ranking Generated")
 
     def get_company_rankings(self):
         # Convert the dictionary values to a list of Company objects

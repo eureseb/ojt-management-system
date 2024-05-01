@@ -6,6 +6,9 @@ import re
 def generate_tags(comments_data):
     return tags(comments_data)
 
+def generate_score(companies_data):
+    return rank(companies_data)
+
 def tags(comments_data):
     # feed a list of comments
     df = pd.DataFrame({'Comments': comments_data})
@@ -110,3 +113,6 @@ def tags(comments_data):
                 tags.append("Good Environment")
     
     return tags
+
+def score(companies_data):
+    return 0
