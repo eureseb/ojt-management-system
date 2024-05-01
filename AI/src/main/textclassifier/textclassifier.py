@@ -7,7 +7,7 @@ def generate_tags(comments_data):
     return tags(comments_data)
 
 def generate_score(companies_data):
-    return rank(companies_data)
+    return score(companies_data)
 
 def tags(comments_data):
     # feed a list of comments
