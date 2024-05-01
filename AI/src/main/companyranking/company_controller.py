@@ -5,6 +5,7 @@ from .company_service import CompanyService
 company_bp = Blueprint('company', __name__)
 company_service = CompanyService()
 
+# For Debugging Purposes
 @company_bp.route('/get_data')
 def get_data():
     db = get_db()

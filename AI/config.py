@@ -1,7 +1,8 @@
+# DD Connection Configuration
 DATABASE = {
     'dbname': 'postgres',
     'user': 'postgres',
     'password': 'postgres',
-    'host': 'localhost',
+    'host': 'postgresql',
     'port': '5432'
 }

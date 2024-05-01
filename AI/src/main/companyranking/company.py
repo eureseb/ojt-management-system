@@ -4,5 +4,5 @@ from dataclasses import dataclass
 class Company:
     companyID: int
     experience_evaluation: list
-    tags: dict
+    tags: list
     rank: int
