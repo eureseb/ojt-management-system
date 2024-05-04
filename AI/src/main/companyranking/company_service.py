@@ -5,9 +5,6 @@ from db import get_db
 from ..textclassifier.textclassifier import generate_tags, generate_score
 import time
 
-# delay for db connection
-time.sleep(5)
-
 app = Flask(__name__)
 
 class CompanyService:
