@@ -1,18 +1,18 @@
 from flask import Blueprint, jsonify, request
-from db import get_db
 from .company_service import CompanyService
 
 company_bp = Blueprint('company', __name__)
 company_service = CompanyService()
 
 # For Debugging Purposes
+'''#from db import get_db
 @company_bp.route('/get_data')
 def get_data():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM company_evaluation")
     data = cursor.fetchall()
-    return jsonify(data)
+    return jsonify(data)'''
 
 @company_bp.route('/companyranking', methods=['GET'])
 def get_company_rankings():
