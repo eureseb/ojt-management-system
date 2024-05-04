@@ -42,6 +42,11 @@ const router = createBrowserRouter([
     children: [{ index: true, element: <OJTRequirements /> }],
   },
   {
+    path: '/update-preferences',
+    element: <MainLayout />,
+    children: [{ index: true, element: <AccountSetUp update /> }],
+  },
+  {
     path: '/sign-in',
     element: <LandingLayout />,
     children: [{ index: true, element: <SignIn /> }],

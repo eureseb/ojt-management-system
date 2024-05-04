@@ -40,4 +40,5 @@ public class Student {
   private String feedbackAndSuggestions;
   @ManyToOne
   private Company currentCompany;
+  private List<Long> suggestedCompanyId;
 }

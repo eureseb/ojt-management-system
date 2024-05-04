@@ -73,9 +73,7 @@ export default function Company() {
             <Typography level="h1">{company.name}</Typography>
             <Stack direction="row" gap={1} flexWrap="wrap">
               {company.tags.map((tag) => (
-                <Chip key={tag}>
-                  {tag} ({tag.length})
-                </Chip>
+                <Chip key={tag}>{tag}</Chip>
               ))}
             </Stack>
           </Stack>

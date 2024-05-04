@@ -1,5 +1,5 @@
 import { Stack } from '@mui/joy';
-import Logo from '../../assets/logo.svg';
+import Logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import { Link as MuiLink } from '@mui/joy';
 import { isLoggedIn as fetchIsLoggedIn } from '../../utils/authentication';
@@ -29,11 +29,6 @@ export default function Header() {
         <img src={Logo} alt="INTern" width="140px" />
       </Link>
       <Stack direction="row" gap={5}>
-        <Link to="/about" style={{ textDecoration: 'none' }}>
-          <MuiLink level="title-md" color="neutral">
-            About
-          </MuiLink>
-        </Link>
         {(!isLoggedIn ||
           path === '/' ||
           path === '/sign-in' ||

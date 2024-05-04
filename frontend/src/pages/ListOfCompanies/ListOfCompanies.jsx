@@ -1,7 +1,11 @@
 import { Stack, Autocomplete } from '@mui/joy';
 import CompanyList from './CompanyList';
 import { useEffect, useState } from 'react';
-import { getAllCompanies, getJobListings } from '../../utils/api';
+import {
+  getAllCompanies,
+  getJobListings,
+  getLoggedInStudentInfo,
+} from '../../utils/api';
 import parseJobListings from '../../utils/parseJobListings';
 import Pagination from '../../components/Pagination/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,6 +15,7 @@ import usePagination from '../../utils/usePagination';
 export default function ListOfCompanies() {
   const [jobListings, setJobListings] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [suggestedCompanyId, setSuggestedCompanyId] = useState(-1);
   const navigate = useNavigate();
   const {
     totalNumberOfItems,
@@ -23,6 +28,9 @@ export default function ListOfCompanies() {
 
   useEffect(() => {
     (async () => {
+      const student = await getLoggedInStudentInfo();
+      if (student.suggestedCompanyId > -1)
+        setSuggestedCompanyId(student.suggestedCompanyId || []);
       const page = currentPage;
       const {
         content: rawJobListings,
@@ -68,7 +76,10 @@ export default function ListOfCompanies() {
           onPageChange={onPageChange}
         />
       </Stack>
-      <CompanyList jobListings={jobListings} />
+      <CompanyList
+        jobListings={jobListings}
+        suggestedCompanyId={suggestedCompanyId}
+      />
     </Stack>
   );
 }

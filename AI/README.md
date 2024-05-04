@@ -29,8 +29,8 @@ This folder contains files related to our AI project.
 
 ## Usage
 
-1. Access company ranking data at `/api/companyranking`.
-2. Access company suggestions at `/api/companysuggestion`.
+1. Access company ranking data at `GET /api/companyranking`.
+2. Access company suggestions at `POST /api/companysuggestion`.
 3. Send POST requests to `/api/companysuggestion` with appropriate parameters to generate suggestions.
 
 POST

@@ -1,5 +1,21 @@
 version: '3.8'
 services:
+  ai:
+    build:
+      context: ./AI
+      dockerfile: Dockerfile
+    image: ai
+    container_name: ai
+    ports:
+      - 8010:8010
+    networks:
+      - intern
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    restart: unless-stopped
+
   postgresql:
     image: postgres:14
     container_name: database
@@ -9,11 +25,6 @@ services:
       - ./dockercompose/env/postgres.env
     networks:
       - intern
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
-      interval: 1s
-      timeout: 5s
-      retries: 15
 
   backend:
     build:
@@ -29,6 +40,12 @@ services:
       - ./dockercompose/env/backend.env
     networks:
       - intern
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/ready']
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
 
   frontend:
     build:
@@ -42,19 +59,6 @@ services:
       - ./dockercompose/env/frontend.env
     depends_on:
       - backend
-    networks:
-      - intern
-
-  AI:
-    build:
-      context: ./AI
-      dockerfile: Dockerfile
-    image: ai
-    container_name: ai
-    depends_on:
-      - frontend
-    ports:
-      - 8010:8010
     networks:
       - intern
 

@@ -44,4 +44,5 @@ public class Company {
   private Long veryGoodExperienceCount;
   private Long isRecommendedForOJTCount;
   private Long isNotRecommendedForOJTCount;
+  private Integer ranking;
 }

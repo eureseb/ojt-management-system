@@ -16,8 +16,8 @@ import CompanyApplyForm from './CompanyApplyForm';
 import Card from '../../shared/Card';
 import timeAgo from '../../utils/timeAgo';
 import { Link } from 'react-router-dom';
-import recommendedCompanies from '../../mockData/recommendedCompanies';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import RankBadge from './RankBadge';
 
 export default function CompanyListCard({
   companyName,
@@ -31,16 +31,21 @@ export default function CompanyListCard({
   contactEmail,
   jobListingId,
   companyId,
+  isRecommended,
+  companyRanking,
+  noOfCompanyReviews,
 }) {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const isCompanySuggested = recommendedCompanies.includes(companyId);
 
   return (
-    <Card color={isCompanySuggested ? 'var(--joy-palette-success-400)' : ''}>
+    <Card
+      color={isRecommended ? 'var(--joy-palette-success-400)' : ''}
+      highlight={isRecommended}
+    >
       <Stack width="100%">
         <CardContent orientation="horizontal">
           <Stack width="50%" alignItems="flex-start" gap={2}>
-            {isCompanySuggested && (
+            {isRecommended && (
               <Stack direction="row" alignItems="center" gap={1}>
                 <AutoAwesomeIcon color="success" fontSize="small" />
                 <Typography level="title-sm" color="success">
@@ -52,9 +57,15 @@ export default function CompanyListCard({
               to={`/company-list/${companyId}`}
               style={{ textDecoration: 'none' }}
             >
-              <Typography level="title-lg">{companyName}</Typography>
+              <Typography level="title-lg">
+                <Stack direction="row" gap={1} alignItems={'center'}>
+                  <RankBadge rank={companyRanking} />
+                  {companyName} ({noOfCompanyReviews} review
+                  {noOfCompanyReviews > 1 ? 's' : ''})
+                </Stack>
+              </Typography>
             </Link>
-            <Stack gap={1}>
+            <Stack gap={1} direction="row" flexWrap="wrap" maxWidth="400px">
               {tags.map((tag) => (
                 <Chip key={tag} color="primary">
                   {tag}
@@ -88,7 +99,7 @@ export default function CompanyListCard({
           <Button
             variant="solid"
             onClick={() => setIsApplyModalOpen(true)}
-            color={isCompanySuggested ? 'success' : 'primary'}
+            color={isRecommended ? 'success' : 'primary'}
           >
             Apply
           </Button>
@@ -128,4 +139,7 @@ CompanyListCard.propTypes = {
   contactEmail: PropTypes.string.isRequired,
   jobListingId: PropTypes.number.isRequired,
   companyId: PropTypes.number.isRequired,
+  isRecommended: PropTypes.bool,
+  companyRanking: PropTypes.number,
+  noOfCompanyReviews: PropTypes.number,
 };

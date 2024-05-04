@@ -71,6 +71,7 @@ export default function SideNav({ isAdmin = false }) {
                 <NavItem title="OJT Requirements" to="/ojt-requirements" />
                 <NavItem title="List of Companies" to="/company-list" />
                 <NavItem title="Company Evaluation" to="/company-evaluation" />
+                <NavItem title="Update Preferences" to="/update-preferences" />
               </>
             )}
           </List>

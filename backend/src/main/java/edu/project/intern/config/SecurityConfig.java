@@ -63,6 +63,7 @@ public class SecurityConfig {
                 auth
                     .requestMatchers(HttpMethod.POST,"/student").permitAll()
                     .requestMatchers(HttpMethod.POST, "/teacher").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/ready").permitAll()
                     .anyRequest().authenticated())
         .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(authenticationEntryPoint));
     return http.build();

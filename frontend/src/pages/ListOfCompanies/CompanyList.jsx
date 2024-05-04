@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/joy';
 import PropTypes from 'prop-types';
 import CompanyListCard from './CompanyListCard';
 
-export default function CompanyList({ jobListings }) {
+export default function CompanyList({ jobListings, suggestedCompanyId }) {
   return (
     <Stack gap={2}>
       <Stack direction="row" paddingLeft={5}>
@@ -28,6 +28,9 @@ export default function CompanyList({ jobListings }) {
           contactEmail={jobListing.contactEmail}
           jobListingId={jobListing.id}
           companyId={jobListing.companyId}
+          isRecommended={suggestedCompanyId.includes(jobListing.companyId)}
+          companyRanking={jobListing.companyRanking}
+          noOfCompanyReviews={jobListing.noOfCompanyReviews}
         />
       ))}
     </Stack>
@@ -48,4 +51,5 @@ CompanyList.propTypes = {
       datePosted: PropTypes.instanceOf(Date).isRequired,
     })
   ).isRequired,
+  suggestedCompanyId: PropTypes.number,
 };

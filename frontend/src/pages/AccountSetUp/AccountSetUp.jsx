@@ -17,22 +17,30 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/joy';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateStudentPreferences } from '../../utils/api';
+import {
+  getLoggedInStudentInfo,
+  updateStudentPreferences,
+} from '../../utils/api';
+import PropTypes from 'prop-types';
 
 const COMPANY_PREFERENCES = [
-  { value: 'innovation', label: 'Innovation' },
-  { value: 'stability', label: 'Stability' },
-  { value: 'growth', label: 'Growth' },
-  { value: 'collaboration', label: 'Collaboration' },
-  { value: 'diversity', label: 'Diversity' },
-  { value: 'autonomy', label: 'Autonomy' },
-  { value: 'recognition', label: 'Recognition' },
-  { value: 'work-life-balance', label: 'Work-life balance' },
-  { value: 'impact', label: 'Impact' },
-  { value: 'development', label: 'Development' },
-  { value: 'culture', label: 'Culture' },
+  { value: 'Professional Environment', label: 'Professional Environment' },
+  { value: 'New Knowledge', label: 'New Knowledge' },
+  { value: 'Self Learning', label: 'Self Learning' },
+  { value: 'Industry Experience', label: 'Industry Experience' },
+  { value: 'Pleasant Experience', label: 'Pleasant Experience' },
+  { value: 'Great Experience', label: 'Great Experience' },
+  { value: 'Good Mentors', label: 'Good Mentors' },
+  { value: 'Systems Development', label: 'Systems Development' },
+  { value: 'Allowance', label: 'Allowance' },
+  { value: 'Poor Handling', label: 'Poor Handling' },
+  { value: 'Unpleasant Experience', label: 'Unpleasant Experience' },
+  { value: 'Challenging Experience', label: 'Challenging Experience' },
+  { value: 'Web Development', label: 'Web Development' },
+  { value: 'Project Management', label: 'Project Management' },
+  { value: 'Good Environment', label: 'Good Environment' },
 ];
 
 const WORK_ENVIRONMENT = [
@@ -41,7 +49,7 @@ const WORK_ENVIRONMENT = [
   { value: 'remote', label: 'Remote' },
 ];
 
-export default function AccountSetUp() {
+export default function AccountSetUp({ update }) {
   const [companyPreferences, setCompanyPreferences] = useState([]);
   const [workEnvironmentPreferences, setworkEnvironmentPreferences] =
     useState('');
@@ -72,12 +80,31 @@ export default function AccountSetUp() {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      if (!update) return;
+      const student = await getLoggedInStudentInfo();
+      setCompanyPreferences(student.companyPreferences || []);
+      setFeedbackAndSuggestions(student.feedbackAndSuggestions || '');
+      setTechnicalSkillsAndInterests(student.technicalSkillsAndInterests || '');
+      setcompensationAndBenefitsPreferences(
+        student.compensationAndBenefitsPreferences || ''
+      );
+      setworkEnvironmentPreferences(student.workEnvironmentPreferences || '');
+      setlocationAndCommutePreferences(
+        student.locationAndCommutePreferences || ''
+      );
+    })();
+  }, [update]);
+
   return (
     <Stack padding={5} alignItems="center">
       <Stack gap={4} maxWidth="600px" width="100%">
-        <Stack>
-          <Typography level="h3">Start and find your company</Typography>
-        </Stack>
+        {!update && (
+          <Stack>
+            <Typography level="h3">Start and find your company</Typography>
+          </Stack>
+        )}
         <Card size="lg">
           <CardContent>
             <Stack gap={3}>
@@ -212,3 +239,7 @@ export default function AccountSetUp() {
     </Stack>
   );
 }
+
+AccountSetUp.propTypes = {
+  update: PropTypes.bool,
+};

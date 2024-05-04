@@ -13,5 +13,7 @@ export default function parseJobListings(rawJobListings) {
     contactEmail: jobListing.company.contactEmail,
     jobTitle: jobListing.jobTitle,
     jobDescription: jobListing.jobDescription,
+    companyRanking: jobListing.company.ranking,
+    noOfCompanyReviews: jobListing.company.reviewCount,
   }));
 }
