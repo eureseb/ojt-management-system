@@ -16,7 +16,8 @@ class CompanySuggestionService:
             # Maximum of 2 suggested companies
             if matching_tags >= 1 and len(company_suggestions) < 2:
                 company_suggestions.append(company.companyID)
-        if len(company_suggestions) == 0:
+        if len(company_suggestions) < 2:
             company_suggestions.append(1)
-            company_suggestions.append(2)
+            if len(company_suggestions) < 2:
+                company_suggestions.append(2)
         return company_suggestions
