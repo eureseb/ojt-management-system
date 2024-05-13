@@ -2,6 +2,7 @@ from ..companyranking.company_service import CompanyService
 
 class CompanySuggestionService:
     def __init__(self):
+        print("Company_Suggestion Up")
         self.company_service = CompanyService()
 
     def get_company_id_by_tags(self, tags):

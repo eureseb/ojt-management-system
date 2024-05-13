@@ -146,5 +146,4 @@ def score(comments_data):
     negative_score = negative_score/len(cleaned_comments)
     weighted_composite_score = weighted_composite_score/len(cleaned_comments)
 
-    print(weighted_composite_score)
     return weighted_composite_score * 100
