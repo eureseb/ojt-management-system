@@ -15,7 +15,7 @@ import usePagination from '../../utils/usePagination';
 export default function ListOfCompanies() {
   const [jobListings, setJobListings] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [suggestedCompanyId, setSuggestedCompanyId] = useState(-1);
+  const [suggestedCompanyId, setSuggestedCompanyId] = useState([]);
   const navigate = useNavigate();
   const {
     totalNumberOfItems,
@@ -29,8 +29,7 @@ export default function ListOfCompanies() {
   useEffect(() => {
     (async () => {
       const student = await getLoggedInStudentInfo();
-      if (student.suggestedCompanyId > -1)
-        setSuggestedCompanyId(student.suggestedCompanyId || []);
+      setSuggestedCompanyId(student.suggestedCompanyId || []);
       const page = currentPage;
       const {
         content: rawJobListings,
